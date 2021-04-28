@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import json
 
 from argparse import ArgumentParser
@@ -6,7 +7,7 @@ import pandas as pd
 
 from nltk.tokenize import TweetTokenizer
 
-from se.utils import save_archive
+from se.archive import save_archive
 
 
 MSG_DESCRIPTION = 'Le arquivo de tweets e gera JSON com tweets tokenizados.'

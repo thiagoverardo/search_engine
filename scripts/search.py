@@ -1,6 +1,7 @@
+#!/usr/bin/env python3
 from argparse import ArgumentParser
 
-from se.utils import load_archive
+from se.archive import load_archive
 from se.index import load_index
 from se.search import search
 
