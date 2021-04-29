@@ -14,7 +14,7 @@ def make_index(docs):
 
 def save_index(index, path):
     with open(path, 'w') as file:
-        json.dump(index, file)
+        json.dump(index, file, indent=4)
 
 
 def load_index(path):
