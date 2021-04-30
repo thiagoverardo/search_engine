@@ -1,24 +1,52 @@
 #!/usr/bin/env python3
-from argparse import ArgumentParser
+import json
+import numpy as np
+from collections import defaultdict
 
-from se.archive import load_archive
-from se.index import make_index, save_index
+
+def load_archive(path):
+    with open(path, "r") as file:
+        return json.load(file)
 
 
-MSG_DESCRIPTION = 'Le docs e gera indice reverso.'
+def make_index(docs):
+    N = len(docs)
+    index = defaultdict(list)
+    for k, doc in enumerate(docs):
+        name = f"doc_{k}"
+        for word in doc:
+            if word in index:
+                if name in index[word]:
+                    index[word][name]["ftd"] += 1
+                else:
+                    index[word][name] = {"ftd": 1}
+            else:
+                index[word] = {name: {"ftd": 1}, "idf": 0}
+            index[word][name]["tftd"] = np.log(1 + index[word][name]["ftd"])
+            nt = len(index[word]) - 1
+            index[word]["idf"] = np.log(N / nt)
+
+    for word in index:
+        for doc in index[word]:
+            if doc != "idf":
+                index[word][doc]["tf-idf"] = (
+                    index[word]["idf"] * index[word][doc]["tftd"]
+                )
+    return index
+
+
+def save_index(index, path):
+    with open(path, "w") as file:
+        json.dump(index, file, indent=4)
 
 
 def main():
-    parser = ArgumentParser(description=MSG_DESCRIPTION)
-    parser.add_argument('filename_docs', help='Os doc.')
-    parser.add_argument('filename_index', help='Os indice.')
-    args = parser.parse_args()
 
-    docs = load_archive(args.filename_docs)
+    docs = load_archive("../tweets/tweets.json")
     index = make_index(docs)
 
-    save_index(index, args.filename_index)
+    save_index(index, "../index.json")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
