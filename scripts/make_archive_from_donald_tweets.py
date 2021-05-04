@@ -5,7 +5,6 @@ import pandas as pd
 
 from nltk.tokenize import TweetTokenizer
 
-
 def main():
     df = pd.read_csv("../tweets/tweets.csv", sep=",", encoding="UTF-8")
     docs = []
