@@ -68,7 +68,20 @@ def build_query(query):
 
 
 def parse_raw_query(raw_query: str):
-    return raw_query.split()
+    query = raw_query.split()
+
+    resultado = ["term", f"{query[0]}"]
+    if len(query) % 2 == 0:
+        raise Exception("Problema na query")
+    elif len(query) > 1:
+        if query[1].lower() in ["or", "and"]:
+            resultado = [
+                f"{query[1]}",
+                resultado,
+                f'{parse_raw_query(" ".join(query[2:]))}',
+            ]
+
+    return resultado
 
 
 def parse_json_query(json_query: str):
