@@ -46,14 +46,4 @@ while True:
 
 df = pd.DataFrame(columns=["Tweet_Text"], data=all_tweets)
 
-url_expression = "(http|ftp|https)://([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:/~+#-]*[\w@?^=%&/~+#-])?"
-punctuation = r"[\.\,\!\:\;\'\"\\\|\/\>\<\?\(\)\[\]\}\{]"
-
-df["Tweet_Text"] = df["Tweet_Text"].str.lower()
-df["Tweet_Text"] = df["Tweet_Text"].str.replace(url_expression, "", regex=True)
-df["Tweet_Text"] = df["Tweet_Text"].str.replace(r"\s\-\s|\-\-+", " ", regex=True)
-df["Tweet_Text"] = df["Tweet_Text"].str.replace(punctuation, " ", regex=True)
-
-df = df[df["Tweet_Text"].str.replace(" ", "") != ""]
-
 df.to_csv("tweets/tweets.csv", encoding="UTF-8", sep=",")

@@ -78,7 +78,7 @@ def parse_raw_query(raw_query: str):
             resultado = [
                 f"{query[1]}",
                 resultado,
-                f'{parse_raw_query(" ".join(query[2:]))}',
+                parse_raw_query(" ".join(query[2:])),
             ]
 
     return resultado
