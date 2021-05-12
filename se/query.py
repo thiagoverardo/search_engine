@@ -69,17 +69,22 @@ def build_query(query):
 
 def parse_raw_query(raw_query: str):
     query = raw_query.split()
-    resultado = ["term", f"{query[0]}"]
+    resultado = Term(query[0])
     if len(query) == 1:
         return resultado
     elif len(query) > 1 and len(query) % 2 != 0:
         if query[1].lower() == "or" or query[1].lower() == "and":
-            resultado = [
-                f"{query[1]}",
-                resultado,
-                parse_raw_query(" ".join(query[2:])),
-            ]
-        return resultado
+            if query[1].lower() == "or":
+                resultado = OpOr(
+                    nodes=[resultado, parse_raw_query(" ".join(query[2:]))]
+                )
+            else:
+                resultado = OpAnd(
+                    nodes=[resultado, parse_raw_query(" ".join(query[2:]))]
+                )
+            return resultado
+        else:
+            raise Exception("As queries devem ser ligadas por 'and' ou 'or'")
 
     raise Exception("Problema na query")
 

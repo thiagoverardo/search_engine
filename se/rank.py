@@ -1,18 +1,26 @@
 import re
 from se.index import load_index
+from se.query import Term
+
+
+def get_terms(query):
+    terms = []
+    if type(query) == type(Term("teste")):
+        return query.term
+    else:
+        for node in query.nodes:
+            terms.append(get_terms(node))
+        return terms
 
 
 def score_document(query, doc, doc_num):
-    words = []
-    for item in query:
-        if item[0] == "term":
-            words.append(item[-1])
+    words = get_terms(query)
+    # print(words)
     score = 0
     index = load_index("../index.json")
-    for word in doc:
-        if word in words:
-            score += index[word][f"doc_{doc_num}"]["tf-idf"]
-
+    for word in doc.split():
+        if word.lower() in words:
+            score += index[word.lower()][f"doc_{doc_num}"]["tf-idf"]
     return score
 
 
