@@ -69,19 +69,19 @@ def build_query(query):
 
 def parse_raw_query(raw_query: str):
     query = raw_query.split()
-
     resultado = ["term", f"{query[0]}"]
-    if len(query) % 2 == 0:
-        raise Exception("Problema na query")
-    elif len(query) > 1:
-        if query[1].lower() in ["or", "and"]:
+    if len(query) == 1:
+        return resultado
+    elif len(query) > 1 and len(query) % 2 != 0:
+        if query[1].lower() == "or" or query[1].lower() == "and":
             resultado = [
                 f"{query[1]}",
                 resultado,
                 parse_raw_query(" ".join(query[2:])),
             ]
+        return resultado
 
-    return resultado
+    raise Exception("Problema na query")
 
 
 def parse_json_query(json_query: str):

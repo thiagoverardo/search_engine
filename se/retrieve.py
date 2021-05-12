@@ -15,4 +15,5 @@ def retrieve(index, query):
                     index_query |= set(index[query_term[-1]])
                 else:
                     index_query |= retrieve(index, query_term)
+    print(index_query)
     return index_query
