@@ -14,7 +14,10 @@ class Term(Node):
         self.term = term
 
     def evaluate(self, index):
-        return set(index[self.term])
+        try:
+            return set(index[self.term])
+        except:
+            return set()
 
 
 class Operation(Node):
@@ -69,6 +72,7 @@ def build_query(query):
 
 def parse_raw_query(raw_query: str):
     query = raw_query.split()
+    print(query)
     resultado = Term(query[0])
     if len(query) == 1:
         return resultado
