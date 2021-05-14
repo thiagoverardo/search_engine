@@ -1,3 +1,6 @@
 def retrieve(index, query):
-    index_query = query.evaluate(index)
-    return index_query
+    try:
+        index_query = query.evaluate(index)
+        return index_query
+    except:
+        return set()

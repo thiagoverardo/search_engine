@@ -15,7 +15,6 @@ def get_terms(query):
 
 def score_document(query, doc, doc_num):
     words = get_terms(query)
-    # print(words)
     score = 0
     index = load_index("../index.json")
     for word in doc.split():
