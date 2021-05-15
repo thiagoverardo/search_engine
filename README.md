@@ -18,11 +18,14 @@ Tem jeito melhor? Tem, mas fica pra o Igor mostrar para vocês na eletiva de sof
 
 Etapa | Implementações 
 --- | --- 
-Construção do repositório e índice | [X] índice reverso [X] limpeza dos dados e normalização
---- | ---
-Queries básicas | [X] Queries básicas e booleanas [X] Enriquecimento de
+Construção do repositório e índice | 
+ - índice reverso
+ - limpeza dos dados e normalização
+Queries básicas |
+ - Queries básicas e booleanas 
+ - Enriquecimento de
 queries
---- | ---
-Retrieval | [X] Retrieval básico e booleano
---- | ---
-Ranking | [X] Ranking tf-tdf
+Retrieval | 
+ - Retrieval básico e booleano
+Ranking | 
+ - Ranking tf-tdf
