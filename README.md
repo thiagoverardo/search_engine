@@ -1,7 +1,6 @@
 # Uma máquina de busca para fins didáticos.
 
 ## Instruções
----
 
 - Faça um *fork* deste repositório para poder receber atualizações eventuais. Para saber como fazer um *fork*, veja https://docs.github.com/en/github/getting-started-with-github/fork-a-repo.
 
@@ -14,7 +13,6 @@
 Tem jeito melhor? Tem, mas fica pra o Igor mostrar para vocês na eletiva de software livre!
 
 ## Implementações
----
 
 Etapa | Implementações 
 --- | --- 
@@ -22,3 +20,7 @@ Construção do repositório e índice | <ul><li>índice reverso</li><li>limpeza
 Queries básicas | <ul><li>Queries básicas</li><li>Queries booleanas</li><li>Enriquecimento de queries (avançado)</li></ul>
 Retrieval | <ul><li>Retrieval básico</li><li>Retrieval booleano</li></ul>
 Ranking |  <ul><li>Ranking tf-tdf</li></ul>
+
+#### Avançado
+
+Realizamos o enrequecimento das queries pegando sinônimos das palavras da busca e pesquisando também pelos documentos, para que documentos com palavras similares as da busca também apareçam na resposta.
