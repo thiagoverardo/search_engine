@@ -18,7 +18,7 @@ Tem jeito melhor? Tem, mas fica pra o Igor mostrar para vocês na eletiva de sof
 
 Etapa | Implementações 
 --- | --- 
-Construção do repositório e índice | <ul><li>índice reverso</li><li>limpeza dos dados e normalização</li></ul>
-Queries básicas | <ul><li>Queries básicas e booleanas</li><li>Enriquecimento de queries</li></ul>
-Retrieval | <ul><li>Retrieval básico e booleano</li></ul>
+Construção do repositório e índice | <ul><li>índice reverso</li><li>limpeza dos dados</li><li>normalização</li></ul>
+Queries básicas | <ul><li>Queries básicas</li><li>Queries booleanas</li><li>Enriquecimento de queries (avançado)</li></ul>
+Retrieval | <ul><li>Retrieval básico</li><li>Retrieval booleano</li></ul>
 Ranking |  <ul><li>Ranking tf-tdf</li></ul>
