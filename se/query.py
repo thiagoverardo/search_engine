@@ -1,6 +1,41 @@
 from __future__ import annotations
-
 import json
+from pysinonimos.sinonimos import Search, historic
+
+
+class Token:
+    def __init__(self, token_type, token_value):
+        self.type = token_type
+        self.value = token_value
+
+
+class Tokenizer:
+    def __init__(self):
+        self.origin = ""
+        self.position = 0
+        self.tokens = []
+        self.actual = None
+
+    def tokenize(self, src):
+        self.origin = src
+        results = []
+        for word in self.origin.split():
+            if word.lower() == "and":
+                results.append(Token("AND", word))
+            elif word.lower() == "or":
+                results.append(Token("OR", word))
+            else:
+                results.append(Token("TERM", word))
+        # for result in results:
+        #     print(result.type, result.value)
+        results.append(Token("EOF", ""))
+        self.tokens = results
+        return self.tokens
+
+    def nextToken(self):
+        if self.position + 1 <= len(self.tokens):
+            self.actual = self.tokens[self.position]
+            self.position += 1
 
 
 class Node:
@@ -70,23 +105,67 @@ def build_query(query):
             raise KeyError(f"Operação {node_type} desconhecida.")
 
 
+def synonymTrees(terms):
+    trees = []
+    for term in terms:
+        if term not in ["or", "and"]:
+            termos = []
+            synArg = Search(term)
+            synArg = synArg.synonyms()
+            if synArg != 404:
+                synArg.append(term)
+                for syn in synArg:
+                    termos.append(Term(syn))
+                tree = OpOr(termos)
+            else:
+                tree = Term(term)
+            trees.append(tree)
+    return trees
+
+
+def parseTerm(tk, idx, sTree):
+    tk.nextToken()
+    if tk.actual.type == "TERM":
+        return idx + 1, sTree[idx]
+
+
+def parseAnd(tk, idx, sTree):
+    idx, firstChild = parseTerm(tk, idx, sTree)
+    output = firstChild
+    if tk.actual.type == "EOF":
+        return output
+    tk.nextToken()
+    while tk.actual.type == "AND":
+        idx, secondChild = parseTerm(tk, idx, sTree)
+        output = OpAnd([output, secondChild])
+        tk.nextToken()
+    return idx, output
+
+
+def parseOr(tk, idx, sTree):
+    idx, firstChild = parseAnd(tk, idx, sTree)
+    output = firstChild
+    while tk.actual.type == "OR":
+        idx, secondChild = parseAnd(tk, idx, sTree)
+        output = OpOr([output, secondChild])
+    return output
+
+
 def parse_raw_query(raw_query: str):
     query = raw_query.split()
-    print(query)
-    resultado = Term(query[0])
+    sTree = synonymTrees(query)
     if len(query) == 1:
-        return resultado
+        return sTree[0]
     elif len(query) > 1 and len(query) % 2 != 0:
         if query[1].lower() == "or" or query[1].lower() == "and":
-            if query[1].lower() == "or":
-                resultado = OpOr(
-                    nodes=[resultado, parse_raw_query(" ".join(query[2:]))]
-                )
+            tk = Tokenizer()
+            tk.tokenize(raw_query)
+            resultado = parseOr(tk, 0, sTree)
+            tk.nextToken()
+            if tk.actual.type == "EOF":
+                return resultado
             else:
-                resultado = OpAnd(
-                    nodes=[resultado, parse_raw_query(" ".join(query[2:]))]
-                )
-            return resultado
+                raise Exception("Erro no parser")
         else:
             raise Exception("As queries devem ser ligadas por 'and' ou 'or'")
 
